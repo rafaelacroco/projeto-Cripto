@@ -1,0 +1,111 @@
+MOEDAS:
+BITCOIN 
+	Taxa_compra = 2%
+	Taxa_venda = 3%
+ETHEREUM
+	Taxa_compra = 1%
+	Taxa_venda = 2%
+RIPPLE
+	Taxa_compra = 1%
+	Taxa_venda = 1%
+
+ Efetuar login
+
+CPF sem pontos e traços
+Senha de 6 dígitos
+
+if login is true:
+Consultar saldo 
+Consultar extrato 
+Depositar
+Sacar 
+Comprar criptomoedas 
+Vender criptomoedas
+Atualizar cotação
+Sai
+
+
+ Consultar saldo (reais, bitcoin, ethereum e ripple) da carteira de investimentos
+
+pedir senha (usuário já está logado)
+
+if senha is true:
+	// mostrar esse tipo de informação
+	Nome: Gabriela Biondi
+	CPF: 123.456.789-00
+	Reais: 580,00
+	Bitcoin: 0,0158
+	Ethereum: 1,03
+	Ripple: 200,35
+
+
+ Consultar extrato de operações da carteira de investimentos
+
+pedir senha (usuário já está logado)
+
+if senha is true:
+	//exemplo
+	Nome: Gabriela Biondi
+	CPF: 123.456.789-00
+	01-01-2024 12:50 + 500.00 REAL CT: 0.0      TX: 0.00 REAL: 500.00 BTC: 0.0 ETH: 0.0   XRP: 0.0 
+	01-01-2024 13:00 + 100.00 XRP  CT: 2.57     TX: 0.01 REAL: 399.00 BTC: 0.0 ETH: 0.0   XRP: 38.9 
+	02-01-2024 14:50 - 100.00 REAL CT: 0.0      TX: 0.00 REAL: 299.00 BTC: 0.0 ETH: 0.0   XRP: 38.9 
+	02-01-2024 18:00 + 100.00 ETH  CT: 16108.0  TX: 0.01 REAL: 198.00 BTC: 0.0 ETH: 0.006 XRP: 38.9 
+
+
+
+ Depositar reais na carteira de investimento
+
+aparecer insira um valor y
+usuário deposita o valor 
+mostra saldo atualizado após o depósito
+x + y = z
+
+
+ Sacar reais da carteira de investimento
+
+usuário deve inserir um valor a ser sacado 
+o valor do saldo deve ser ≠ de < 0
+mostrar saldo
+
+
+ Comprar criptomoedas (bitcoin, ethereum ou ripple)
+
+pedir senha (usuário já está logado)
+
+if senha is true:
+	*mostrar cotação das criptomoedas*
+	escolha qual criptomoeda comprar e quanto deseja comprar, desde que seu saldo não fique negativo
+	depois aplicar taxa de compra
+
+
+ Vender criptomoedas (bitcoin, ethereum e ripple)
+
+pedir senha (usuário já está logado)
+
+if senha is true:
+	*mostrar cotação das criptomoedas*
+	escolha qual criptomoeda vender e quanto deseja vender, desde que seu saldo não fique negativo
+	depois aplicar taxa de venda
+
+
+ Atualizar cotação das criptomoedas (bitcoin, ethereum e ripple)
+
+	Usar a geração de números aleatórios para variar a 
+cotação de todas as criptomoedas
+	Observação: as variações precisam ser de no máximo 
++5% do valor anterior e no mínimo -5% do valor 
+anterior
+
+
+
+
+
+
+
+
+	IMPORTANTE: Não se esqueça de que a exchange não pode 
+perder as informações se o programa terminar, fechar, parar de 
+funcionar, ou o computador desligar!
+	Todos os dados devem ser salvos de maneira permanente
+	Para isso, utilize arquivos .txt
