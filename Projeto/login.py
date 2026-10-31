@@ -2,8 +2,14 @@
 # CPF sem pontos e traços / Senha de 6 dígitos
 # if login is true:
 # Consultar saldo; Consultar extrato; Depositar; Sacar; Comprar criptomoedas; Vender criptomoedas; Atualizar cotação; Sai
+import os
+
+armazenamento_conta = "conta.txt"
 conta = []
-# acesso 1
+
+# ACESSO 1 - para  entrar na conta:
+
+#Mostra o que você pode acessar
 def acessar():
     print("1 - Criar conta")
     print("2 - Acessar minha conta")
@@ -20,27 +26,55 @@ def processe_acessar(acesso):
         return False
     return False
 
-    
 def criar_conta():
+    if os.path.exists(armazenamento_conta):
+        print("[ERRO] Esse aparelho já possui uma conta cadastrada!")
+        return 
+    
+    print("\n Realize seu cadastro: \n")
+    nome = str(input("Digite seu nome: "))
+    #Condições do CPF
     while True:
-        nome = str(input("Digite seu nome: "))
-        cpf = int(input("Digite seu CPF: "))
-        senha = input("Digite uma senha: ")
-        if '.'in cpf or '-' in cpf:
-            print(" O CPF não deve possuir pontos ou traços digitados, apenas números.")
+        cpf = input("Digite seu CPF: ")
+        #cpf não pode ter ponto e traço
+        if "." in cpf or "-" in cpf:
+            print(" O CPF não deve possuir pontos ou traços digitados!")
+        elif not cpf.isdigit():
+            print("O CPF deve ser composto apenas por números!")
+        elif len(cpf) != 11:
+            print("O CPF deve obrigatóriamente possuir 11 números!")
         else:
-            nova_conta = {"nome": nome, "cpf":cpf,"senha":senha}
-            print("conta criada com sucesso")
-            conta.append(nova_conta)
-            break   
+            break
+
+    senha = input("Digite uma senha: ")
+    #Dados da conta armazenado:
+    with open(armazenamento_conta, "w") as armazenamento:
+        armazenamento.write(f"{nome}\n{cpf}\n{senha}")
+    print("Sua conta foi criada com sucesso!")
 
 def acessar_conta():
-    cpf = int(input("Digite seu CPF: "))
-    senha = input("Digite uma senha: ")
-    for i in range(len(conta)):
-        if conta[i].get("cpf") == cpf and conta[i].get("senha") == senha:
-            exibe_acessos()
-            return True
+    #se o arquivo não existir
+    if not os.path.exists(armazenamento_conta):
+        print("Nenhuma conta foi encontrada. \n É necessário criar uma conta antes de poder acessar outras modalidades.")
+        return
+    
+    #se existir permita o acesso
+    print("Acessar Conta: ")
+    cpf_acesso = input("Digite seu CPF: ")
+    senha_acesso = input("Digite uma senha: ")
+
+    with open(armazenamento_conta, "r") as armazenamento:
+        linhas = armazenamento.readlines()
+        nome_armazenado = linhas[0].strip()
+        cpf_armazenado = linhas[1].strip()
+        senha_armazenada = linhas[2].strip()
+    if cpf_armazenado == cpf_acesso and senha_acesso == senha_armazenada:
+        print(f"Acesso Liberado! \n Seja Bem-vindo {nome_armazenado}")
+        exibe_acessos()
+    else:
+        print("Seu CPF ou sua senha está incorreto! \n Acesso negado ")
+        return False
+
 # acessos
 def exibe_acessos():
     print("1 - Consultar saldo")
