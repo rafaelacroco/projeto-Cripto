@@ -147,6 +147,7 @@ def verifica_senha():
         return True        
     while senha_acessos != senha_armazenada:
         senha_acessos2 = input("Digite sua senha: ")
+        print("Sua senha está errada!")
         with open(armazenamento_conta, "r") as armazenamento:
             linhas = armazenamento.readlines()
             senha_armazenada = linhas[2].strip()
@@ -165,8 +166,8 @@ def verifica_saldo(inserir_reais, sacar_reais):
     saldo_atualizado = 0
     global saldo_atual
     global reais
-    saldo_atual = reais + inserir_reais
-    saldo_atual = reais - sacar_reais
+    saldo_atual = saldo_atual + inserir_reais
+    saldo_atual = saldo_atual - sacar_reais
     if saldo_atual >= saldo_atualizado or saldo_atual <= saldo_atualizado:
         saldo_atualizado = saldo_atual
     print(saldo_atual)
