@@ -81,7 +81,6 @@ def acessar_conta():
         print(f"Acesso Liberado! \n Seja Bem-vindo {nome_armazenado}")
         #criado para que o 'acessar()' parasse de aparecer junto ao 'exibe_acessos()'
         while True:
-
             exibe_acessos()
             acessos = int(input("Digite uma das opções: "))
             if not processar_acessos(acessos):
@@ -134,18 +133,82 @@ def processar_acessos(acessos):
     elif acessos == 0:
         return False
     return False
-        
+
+#Subfunções de ACESSO 2
+def verifica_senha():  
+    print("Para Acessar é preciso que você digite sua senha.\n")
+    with open(armazenamento_conta, "r") as armazenamento:
+        linhas = armazenamento.readlines()
+        senha_armazenada = linhas[2].strip()
+
+    senha_acessos = input("Digite sua senha: ")
+    if senha_acessos == senha_armazenada:
+        print("\nSeu acesso foi liberado!")
+        return True        
+    while senha_acessos != senha_armazenada:
+        senha_acessos2 = input("Digite sua senha: ")
+        with open(armazenamento_conta, "r") as armazenamento:
+            linhas = armazenamento.readlines()
+            senha_armazenada = linhas[2].strip()
+        if senha_acessos2 == senha_armazenada:
+                print("\nSeu acesso foi liberado!")
+                return True       
+            
+#valor inicial
+reais = 0
+bitcoin = 0
+ethereum = 0
+ripple = 0
+saldo_atual = 0
+
+def verifica_saldo(inserir_reais, sacar_reais):
+    saldo_atualizado = 0
+    global saldo_atual
+    global reais
+    saldo_atual = reais + inserir_reais
+    saldo_atual = reais - sacar_reais
+    if saldo_atual >= saldo_atualizado or saldo_atual <= saldo_atualizado:
+        saldo_atualizado = saldo_atual
+    print(saldo_atual)
+    return
+
 # acesso 2 depois de acessar conta
 
 def consultar_saldo():
-    print("teste")
+    verifica_senha()
+    with open(armazenamento_conta, "r") as armazenamento: 
+        linhas = armazenamento.readlines()
+        nome_armazenado = linhas[0].strip()
+        cpf_armazenado = linhas[1].strip()
+    print(f"Nome: {nome_armazenado} \n CPF: {cpf_armazenado} \n ")
     return
+
 def consultar_extrato():
     return
+
 def depositar():
+    print("Acesso ao grid de depósito")
+    verifica_senha()
+    global saldo_atual
+    global reais
+    inserir_reais = float(input("Digite o valor que deseja depositar: "))
+    #mostrar saldo atual
+    verifica_saldo(inserir_reais, 0) 
     return
+
 def sacar():
+    print("Acesso ao grid de saque")
+    verifica_senha()
+    global saldo_atual
+    global reais
+    sacar_reais = float(input("Digite o valor que deseja sacar: "))
+    if sacar_reais > saldo_atual:
+        print("O saldo atual é menor que o valor a ser resgatado.")
+    else:
+        #mostra saldo atual
+        verifica_saldo(0, sacar_reais)
     return
+
 def comprar_cripto():
     return
 def vender_cripto():
