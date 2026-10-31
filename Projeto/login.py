@@ -1,7 +1,3 @@
-#  Efetuar login
-# CPF sem pontos e traços / Senha de 6 dígitos
-# if login is true:
-# Consultar saldo; Consultar extrato; Depositar; Sacar; Comprar criptomoedas; Vender criptomoedas; Atualizar cotação; Sai
 import os
 
 armazenamento_conta = "conta.txt"
@@ -11,24 +7,39 @@ conta = []
 
 #Mostra o que você pode acessar
 def acessar():
-    print("1 - Criar conta")
-    print("2 - Acessar minha conta")
+    print("1 - Acessar minha conta")
+    print("2 - Criar conta")
     print("0 - Sair")
-
 def processe_acessar(acesso):
     if acesso == 1:
-        criar_conta()
-        return True
-    elif acesso == 2:
         acessar_conta()
         return True
+    elif acesso == 2:
+        criar_conta()
+        return True
     elif acesso == 0:
+        return False
+    return False
+
+#criei para quando o cliente já possue uma conta, bloqueia a opção de criar conta
+def conta_existente():
+    print("1 - Acessar minha conta")
+    print("0 - Sair")
+    escolha = int(input("Digite uma das opções: "))
+    processe_conta_existente(escolha)
+    return
+def processe_conta_existente(escolha):
+    if escolha == 1:
+        acessar_conta()
+        return True
+    elif escolha == 0:
         return False
     return False
 
 def criar_conta():
     if os.path.exists(armazenamento_conta):
         print("[ERRO] Esse aparelho já possui uma conta cadastrada!")
+        conta_existente()
         return 
     
     print("\n Realize seu cadastro: \n")
@@ -45,7 +56,6 @@ def criar_conta():
             print("O CPF deve obrigatóriamente possuir 11 números!")
         else:
             break
-
     senha = input("Digite uma senha: ")
     #Dados da conta armazenado:
     with open(armazenamento_conta, "w") as armazenamento:
@@ -57,7 +67,6 @@ def acessar_conta():
     if not os.path.exists(armazenamento_conta):
         print("Nenhuma conta foi encontrada. \n É necessário criar uma conta antes de poder acessar outras modalidades.")
         return
-    
     #se existir permita o acesso
     print("Acessar Conta: ")
     cpf_acesso = input("Digite seu CPF: ")
@@ -70,12 +79,19 @@ def acessar_conta():
         senha_armazenada = linhas[2].strip()
     if cpf_armazenado == cpf_acesso and senha_acesso == senha_armazenada:
         print(f"Acesso Liberado! \n Seja Bem-vindo {nome_armazenado}")
-        exibe_acessos()
+        #criado para que o 'acessar()' parasse de aparecer junto ao 'exibe_acessos()'
+        while True:
+
+            exibe_acessos()
+            acessos = int(input("Digite uma das opções: "))
+            if not processar_acessos(acessos):
+                print("Saindos...")
+                break
     else:
         print("Seu CPF ou sua senha está incorreto! \n Acesso negado ")
         return False
 
-# acessos
+# ACESSOS PARTE 2
 def exibe_acessos():
     print("1 - Consultar saldo")
     print("2 - Consultar extrato")
@@ -122,6 +138,7 @@ def processar_acessos(acessos):
 # acesso 2 depois de acessar conta
 
 def consultar_saldo():
+    print("teste")
     return
 def consultar_extrato():
     return
