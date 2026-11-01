@@ -1,3 +1,4 @@
+# Você estava mexendo em comprar criptomoedas (Falta armazenar elas e realizar mais testes) e tem que criar arquivos para armazenar todas as informações, tem que arrumar o  consultar saldo
 import os 
 import random
 
@@ -161,6 +162,9 @@ bitcoin = 420920.00
 ethereum = 3600.27
 ripple = 722.09
 saldo_atual = 0
+saldo_bitcon = 0
+saldo_ethereum = 0
+saldo_ripple = 0
 
 #Faz parte das funções de saque, depósito, consultar saldo e consultar extrato
 def verifica_saldo(inserir_reais, sacar_reais):
@@ -170,15 +174,13 @@ def verifica_saldo(inserir_reais, sacar_reais):
     saldo_atual = saldo_atual - sacar_reais
     if saldo_atual >= saldo_atualizado or saldo_atual <= saldo_atualizado:
         saldo_atualizado = saldo_atual
-    print(saldo_atual)
     return
-
-# def ():
-#     print("1 - Bitcoin")
-#     print("2 - Ethereum")
-#     print("3 - Ripple")
-#     print("0 - Sair")
-
+#parte de vendas e compras de criptomoedas
+def tipos_criptomoedas():
+    print("1 - Bitcoin")
+    print("2 - Ethereum")
+    print("3 - Ripple")
+    print("0 - Sair")
 
 # acesso 2 depois de acessar conta
 
@@ -188,7 +190,8 @@ def consultar_saldo():
         linhas = armazenamento.readlines()
         nome_armazenado = linhas[0].strip()
         cpf_armazenado = linhas[1].strip()
-    print(f"Nome: {nome_armazenado} \n CPF: {cpf_armazenado} \n ")
+        verifica_saldo()
+    print(f"Nome: {nome_armazenado} \n CPF: {cpf_armazenado} \n Reais: {saldo_atual}")
     return
 
 def consultar_extrato():
@@ -216,7 +219,56 @@ def sacar():
     return
 
 def comprar_cripto():
-    return
+    atualizar_cotacao()
+    tipos_criptomoedas()
+    criptomoedas = int(input("Escolha uma das criptomoedas:"))
+    if criptomoedas == 1:
+        print("Você escolheu comprar Bitcoin!")
+        print(f"A cotação do Bitcoin é de {bitcoin}")
+        taxa = bitcoin + (bitcoin * 0.02)
+        print(f"A taxa de compra é de 2%. \nO valor do Bitcoin é {taxa} ")
+        valor_comprar = float(input("Digite o valor que deseja investir para comprar: "))
+        if valor_comprar > saldo_atual:
+            print("Saldo insuficiente!") 
+        elif valor_comprar < saldo_atual:
+            comprado = valor_comprar / taxa
+            print(f"Você comprou {comprado} de Bitcoin")
+        else:
+            print("Algo deu errado!\nTente novamente.")
+            return False
+    elif criptomoedas == 2:
+        print("Você escolheu comprar Ethereum!")
+        print(f"A cotação do Ethereum é de {ethereum}")
+        taxa = ethereum + (ethereum * 0.01)
+        print(f"A taxa de compra é de 1%. \nO valor do Ethereum é {taxa} ")            
+        valor_comprar = float(input("Digite o valor que deseja investir para comprar: "))
+        if valor_comprar > saldo_atual:
+            print("Saldo insuficiente!") 
+        elif valor_comprar < saldo_atual:
+            comprado = valor_comprar / taxa
+            print(f"Você comprou {comprado} de Ethereum")
+        else:
+            print("Algo deu errado!\nTente novamente.")
+            return False
+    elif criptomoedas == 3:
+            print("Você escolheu comprar Ripple!")
+            print(f"A cotação do Ripple é de {ripple}")
+            taxa = ripple + (ripple * 0.01)
+            print(f"A taxa de compra é de 1%. \nO valor do Ripple é {taxa} ")
+            valor_comprar = float(input("Digite o valor que deseja investir para comprar: "))
+            if valor_comprar > saldo_atual:
+                print("Saldo insuficiente!") 
+            elif valor_comprar < saldo_atual:
+                comprado = valor_comprar / taxa
+                print(f"Você comprou {comprado} de Ripple")
+            else:
+                print("Algo deu errado!\nTente novamente.")
+                return False
+    elif criptomoedas == 0:
+        print("Saindo...")
+        return False
+    return False
+
 def vender_cripto():
     return
 def atualizar_cotacao():
