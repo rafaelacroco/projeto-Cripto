@@ -1,4 +1,5 @@
-import os
+import os 
+import random
 
 armazenamento_conta = "conta.txt"
 conta = []
@@ -156,22 +157,28 @@ def verifica_senha():
                 return True       
             
 #valor inicial
-reais = 0
-bitcoin = 0
-ethereum = 0
-ripple = 0
+bitcoin = 420920.00
+ethereum = 3600.27
+ripple = 722.09
 saldo_atual = 0
 
+#Faz parte das funções de saque, depósito, consultar saldo e consultar extrato
 def verifica_saldo(inserir_reais, sacar_reais):
     saldo_atualizado = 0
     global saldo_atual
-    global reais
     saldo_atual = saldo_atual + inserir_reais
     saldo_atual = saldo_atual - sacar_reais
     if saldo_atual >= saldo_atualizado or saldo_atual <= saldo_atualizado:
         saldo_atualizado = saldo_atual
     print(saldo_atual)
     return
+
+# def ():
+#     print("1 - Bitcoin")
+#     print("2 - Ethereum")
+#     print("3 - Ripple")
+#     print("0 - Sair")
+
 
 # acesso 2 depois de acessar conta
 
@@ -191,7 +198,6 @@ def depositar():
     print("Acesso ao grid de depósito")
     verifica_senha()
     global saldo_atual
-    global reais
     inserir_reais = float(input("Digite o valor que deseja depositar: "))
     #mostrar saldo atual
     verifica_saldo(inserir_reais, 0) 
@@ -201,7 +207,6 @@ def sacar():
     print("Acesso ao grid de saque")
     verifica_senha()
     global saldo_atual
-    global reais
     sacar_reais = float(input("Digite o valor que deseja sacar: "))
     if sacar_reais > saldo_atual:
         print("O saldo atual é menor que o valor a ser resgatado.")
@@ -215,7 +220,16 @@ def comprar_cripto():
 def vender_cripto():
     return
 def atualizar_cotacao():
-    return
+    global bitcoin, ripple, ethereum
+    print("Atualização de cotação das criptomoedas: \n")
+    variaçao = random.uniform(-0.05, 0.05)
+    bitcoin = bitcoin + (bitcoin * variaçao)
+    ethereum = ethereum + (ethereum * variaçao)
+    ripple = ripple + (ripple * variaçao)
+    porcentagem = variaçao * 100
+    print(f"A variação foi de {porcentagem:.2f}\n")
+    print(f"Bitcoin: {bitcoin:.2f} \nEthereum: {ethereum:.2f}\nRipple: {ripple:.2f}")
+    return bitcoin, ethereum, ripple
 
 while True:
     acessar()
