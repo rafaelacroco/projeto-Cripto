@@ -1,4 +1,6 @@
-#tem que consertar os arquivos que estão armazenando as informações. e depois arrumar os layouts
+#arrumar quantas casas decimais aparece quando se compra a criptomoeda e ver se vale colocar que no minimo tem que comprar 1 ou 0.5% de moeda. além de arrumar os layouts   
+#arrumar o extrato, layout e funcionamento
+                                                                               
 import os 
 import random
 from datetime import datetime
@@ -84,6 +86,16 @@ def acessar_conta():
         senha_armazenada = linhas[2].strip()
     if cpf_armazenado == cpf_acesso and senha_acesso == senha_armazenada:
         print(f"Acesso Liberado! \n Seja Bem-vindo {nome_armazenado}")
+        #serve para ler o arquivo e manter o saldo armazenado
+        if os.path.exists(armazenamento_moedas):
+            with open(armazenamento_moedas, "r") as armazenamento:
+                linhas = armazenamento.readlines()
+                global saldo_atual, saldo_bitcon, saldo_ethereum, saldo_ripple
+                saldo_atual = float(linhas[0].strip())
+                saldo_bitcon = float(linhas[1].strip())
+                saldo_ethereum = float(linhas[2].strip())
+                saldo_ripple = float(linhas[3].strip())
+
         #criado para que o 'acessar()' parasse de aparecer junto ao 'exibe_acessos()'
         while True:
             exibe_acessos()
@@ -179,7 +191,7 @@ def verifica_saldo(inserir_reais=0, sacar_reais=0):
         saldo_atualizado = saldo_atual
         print(f"Reais: {saldo_atualizado:.2f}")
         registro(f"Atualização de saldo em reais: {saldo_atualizado:.2f}")
-        armazenamento_saldo(f"Reais: {saldo_atual}")
+        armazenamento_saldo()
     return
 #Armazenamento do saldo das criptomoedas
 def armazenar_saldocripto(comprado_B=0, comprado_E=0, comprado_R=0, venda_B=0, venda_E=0, venda_R=0):
@@ -192,30 +204,26 @@ def armazenar_saldocripto(comprado_B=0, comprado_E=0, comprado_R=0, venda_B=0, v
     saldo_bitcon = saldo_bitcon - venda_B
     if saldo_bitcon >= saldo_atualBit or saldo_bitcon <= saldo_atualBit:
         saldo_atualBit = saldo_bitcon
-        print(f"Bitcoin: {saldo_atualBit:.5f}")
-        registro(f"Atualização de saldo em Bitcoin: {saldo_atualBit:.5f}")
+        print(f"Bitcoin: {saldo_atualBit:.2f}")
+        registro(f"Atualização de saldo em Bitcoin: {saldo_atualBit:.2f}")
+        armazenamento_saldo()
     #Ethereum saldo
     saldo_ethereum = saldo_ethereum + comprado_E
     saldo_ethereum = saldo_ethereum - venda_E
     if saldo_ethereum >= saldo_atualEthe or saldo_ethereum <= saldo_atualEthe:
         saldo_atualEthe = saldo_ethereum
-        print(f"Ethereum: {saldo_atualEthe:.5f}")
-        registro(f"Atualização de saldo em Ethereum: {saldo_atualEthe:.5f}")
+        print(f"Ethereum: {saldo_atualEthe:.2f}")
+        registro(f"Atualização de saldo em Ethereum: {saldo_atualEthe:.2f}")
+        armazenamento_saldo()
     #Ripple saldo
     saldo_ripple = saldo_ripple + comprado_R
     saldo_ripple =  saldo_ripple - venda_R
     if saldo_ripple >= saldo_atualRip or saldo_ripple <= saldo_atualRip:
         saldo_atualRip = saldo_ripple
-        print(f"Ripple: {saldo_atualRip:.5f}\n") 
-        registro(f"Atualização de saldo em Ripple: {saldo_atualRip:.5f}")
-    armazenamento_saldo(f"Bitcoin: {saldo_bitcon} \nEthereum: {saldo_ethereum} \nRipple: {saldo_ripple}")
+        print(f"Ripple: {saldo_atualRip:.2f}\n") 
+        registro(f"Atualização de saldo em Ripple: {saldo_atualRip:.2f}")
+        armazenamento_saldo()
     return
-def armazenamento_saldo(tipo_saldo):
-    with open(armazenamento_moedas, "w") as armazenamento:
-        armazenamento.write(f"{tipo_saldo}{saldo_atual}")
-        armazenamento.write(f"{tipo_saldo}{saldo_bitcon}")
-        armazenamento.write(f"{tipo_saldo}{saldo_ethereum}")
-        armazenamento.write(f"{tipo_saldo}{saldo_ripple}")
         
 #parte de vendas e compras de criptomoedas
 def tipos_criptomoedas():
@@ -233,6 +241,14 @@ def registro(informações):
     with open(Extrato, "a") as extrato:
         extrato.write(f"{data} {informações}\n\n")
 
+def armazenamento_saldo():
+    global saldo_atual, saldo_bitcon, saldo_ethereum, saldo_ripple
+
+    with open(armazenamento_moedas, "w") as armazenamento:
+        armazenamento.write(f"{saldo_atual:.2f}\n")
+        armazenamento.write(f"{saldo_bitcon:.2f}\n")
+        armazenamento.write(f"{saldo_ethereum:.2f}\n")
+        armazenamento.write(f"{saldo_ripple:.2f}\n")
 
 # acesso 2 depois de acessar conta
 
@@ -291,18 +307,18 @@ def comprar_cripto():
     #Bitcoin
     if criptomoedas == 1:
         print("Você escolheu comprar Bitcoin!")
-        print(f"A cotação do Bitcoin é de {bitcoin}")
+        print(f"A cotação do Bitcoin é de {bitcoin:.2f}")
         taxa = bitcoin + (bitcoin * 0.02)
-        print(f"A taxa de compra é de 2%. \nO valor do Bitcoin é {taxa} ")
+        print(f"A taxa de compra é de 2%. \nO valor do Bitcoin é {taxa:.2f} ")
         valor_comprar = float(input("Digite o valor que deseja investir para comprar: "))
         if valor_comprar > saldo_atual:
             print("Saldo insuficiente!") 
         elif valor_comprar < saldo_atual:
             comprado_B = valor_comprar / taxa
-            print(f"Você comprou {comprado_B} de Bitcoin")
+            print(f"Você comprou {comprado_B:.2f} de Bitcoin")
             armazenar_saldocripto(comprado_B, 0, 0)
             verifica_saldo(0, valor_comprar)
-            registro(f"Compra de Bitcoin: {comprado_B}")
+            registro(f"Compra de Bitcoin: {comprado_B:.2f}")
             return 
         else:
             print("Algo deu errado!\nTente novamente.")
@@ -310,18 +326,18 @@ def comprar_cripto():
     #Ethereum
     elif criptomoedas == 2:
         print("Você escolheu comprar Ethereum!")
-        print(f"A cotação do Ethereum é de {ethereum}")
+        print(f"A cotação do Ethereum é de {ethereum:.2f}")
         taxa = ethereum + (ethereum * 0.01)
-        print(f"A taxa de compra é de 1%. \nO valor do Ethereum é {taxa} ")            
+        print(f"A taxa de compra é de 1%. \nO valor do Ethereum é {taxa:.2f} ")            
         valor_comprar = float(input("Digite o valor que deseja investir para comprar: "))
         if valor_comprar > saldo_atual:
             print("Saldo insuficiente!") 
         elif valor_comprar < saldo_atual:
             comprado_E = valor_comprar / taxa
-            print(f"Você comprou {comprado_E} de Ethereum")
+            print(f"Você comprou {comprado_E:.2f} de Ethereum")
             armazenar_saldocripto(0, comprado_E, 0)
             verifica_saldo(0, valor_comprar)
-            registro(f"Compra de Ethereum: {comprado_E}")
+            registro(f"Compra de Ethereum: {comprado_E:.2f}")
             return      
         else:
             print("Algo deu errado!\nTente novamente.")
@@ -329,18 +345,18 @@ def comprar_cripto():
     #Ripple
     elif criptomoedas == 3:
             print("Você escolheu comprar Ripple!")
-            print(f"A cotação do Ripple é de {ripple}")
+            print(f"A cotação do Ripple é de {ripple:.2f}")
             taxa = ripple + (ripple * 0.01)
-            print(f"A taxa de compra é de 1%. \nO valor do Ripple é {taxa} ")
+            print(f"A taxa de compra é de 1%. \nO valor do Ripple é {taxa:.2f} ")
             valor_comprar = float(input("Digite o valor que deseja investir para comprar: "))
             if valor_comprar > saldo_atual:
                 print("Saldo insuficiente!") 
             elif valor_comprar < saldo_atual:
                 comprado_R = valor_comprar / taxa
-                print(f"Você comprou {comprado_R} de Ripple")
+                print(f"Você comprou {comprado_R:.2f} de Ripple")
                 armazenar_saldocripto(0, 0, comprado_R)
                 verifica_saldo(0, valor_comprar)
-                registro(f"Compra de Ripple: {comprado_R}")
+                registro(f"Compra de Ripple: {comprado_R:.2f}")
                 return 
             else:
                 print("Algo deu errado!\nTente novamente.")
@@ -357,18 +373,18 @@ def vender_cripto():
     #Bitcoin
     if criptomoedas == 1:
         print("Você escolheu vender Bitcoin!")
-        print(f"A cotação do Bitcoin é de {bitcoin:.5f}")
+        print(f"A cotação do Bitcoin é de {bitcoin:.2f}")
         taxa = bitcoin + (bitcoin * 0.03)
-        print(f"A taxa de venda é de 3%. \nO valor do Bitcoin é {taxa:.5f} ")
+        print(f"A taxa de venda é de 3%. \nO valor do Bitcoin é {taxa:.2f} ")
         valor_venda = float(input("Digite o valor de Bitcoin que deseja vender: "))
         if valor_venda > saldo_bitcon:
             print("Saldo insuficiente!") 
         elif valor_venda <= saldo_bitcon:
             venda_B = valor_venda * taxa
-            print(f"Você vendeu {venda_B:.5f} de Bitcoin")
+            print(f"Você vendeu {venda_B:.2f} de Bitcoin")
             armazenar_saldocripto(0, 0, 0, valor_venda, 0, 0)
             verifica_saldo(venda_B, 0)
-            registro(f"Venda de Bitcoin: {venda_B}")
+            registro(f"Venda de Bitcoin: {venda_B:.2f}")
             return 
         else:
             print("Algo deu errado!\nTente novamente.")
@@ -376,18 +392,18 @@ def vender_cripto():
     #Ethereum 
     if criptomoedas == 2:
         print("Você escolheu vender Ethereum!")
-        print(f"A cotação do Ethereum é de {ethereum:.5f}")
+        print(f"A cotação do Ethereum é de {ethereum:.2f}")
         taxa = ethereum + (ethereum * 0.02)
-        print(f"A taxa de venda é de 2%. \nO valor do Ethereum é {taxa:.5f} ")
+        print(f"A taxa de venda é de 2%. \nO valor do Ethereum é {taxa:.2f} ")
         valor_venda = float(input("Digite o valor de Ethereum que deseja vender: "))
         if valor_venda > saldo_ethereum:
             print("Saldo insuficiente!") 
         elif valor_venda <= saldo_ethereum:
             venda_E = valor_venda * taxa
-            print(f"Você vendeu {venda_E:.5f} de Ethereum")
+            print(f"Você vendeu {venda_E:.2f} de Ethereum")
             armazenar_saldocripto(0, 0, 0, 0, valor_venda, 0)
             verifica_saldo(venda_E, 0)
-            registro(f"Venda de Ethereum: {venda_E}")
+            registro(f"Venda de Ethereum: {venda_E:.2f}")
             return 
         else:
             print("Algo deu errado!\nTente novamente.")
@@ -395,18 +411,18 @@ def vender_cripto():
     #Ripple
     if criptomoedas == 3:
         print("Você escolheu vender Ripple!")
-        print(f"A cotação do Ripple é de {ripple:.5f}")
+        print(f"A cotação do Ripple é de {ripple:.2f}")
         taxa = ripple + (ripple * 0.01)
-        print(f"A taxa de venda é de 1%. \nO valor do Ripple é {taxa:.5f} ")
+        print(f"A taxa de venda é de 1%. \nO valor do Ripple é {taxa:.2f} ")
         valor_venda = float(input("Digite o valor de Ripple que deseja vender: "))
         if valor_venda > saldo_ripple:
             print("Saldo insuficiente!") 
         elif valor_venda <= saldo_ripple:
             venda_R = valor_venda * taxa
-            print(f"Você vendeu {venda_R:.5f} de Ripple")
+            print(f"Você vendeu {venda_R:.2f} de Ripple")
             armazenar_saldocripto(0, 0, 0, 0, 0, valor_venda)
             verifica_saldo(venda_R, 0)
-            registro(f"Venda de Ripple: {venda_R}")
+            registro(f"Venda de Ripple: {venda_R:.2f}")
             return 
         else:
             print("Algo deu errado!\nTente novamente.")
